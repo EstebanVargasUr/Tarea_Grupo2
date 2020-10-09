@@ -1,4 +1,4 @@
-module Beans.Login exposing (..)
+module Beans.Cliente exposing (..)
 
 import RemoteData exposing (RemoteData)
 import Http.Error exposing (RequestError)
@@ -12,19 +12,27 @@ import JsonApi.Encode.Document exposing (build)
 import JsonApi.Resource exposing (build)
 import JsonApi.Encode exposing (document)
 import Json.Decode exposing (Decoder)
-import Beans.Login as Login
+import Beans.Cliente as Cliente
 
-type alias Login =
-   { cedula : String
-   , password : String
+type alias Cliente =
+   { 
+     id : Long    
+   , nombreCompleto : String
+   , cedula : String
+   , telefono : String
+   , direccion : String
+   , passwordEncriptado : String
+   , fechaRegistro : Date
+   , fechaModificacion : Date
+   , estado : Bool
    }
 
 
 type alias Post =
-    { id : String
+    { id : Long
     , title : String
     , body : String
-    , creator : Login
+    , creator : Cliente
     }
 
 
@@ -38,7 +46,7 @@ createPost : (RemoteData.RemoteData Http.Error.RequestError Post) -> PostPayload
 createPost msg body =
     Http.Request.request
         { headers = []
-        , url = { url = "http://localhost:8099/login", method = Http.Methods.POST }
+        , url = { url = "http://localhost:8099/cliente", method = Http.Methods.POST }
         , body = encodeBody body
         , documentDecoder = JsonApi.Decode.resource "posts" postDecoder
         }
@@ -64,12 +72,18 @@ postDecoder res =
     Json.Decode.map4 Post
         (Json.Decode.field "title" Json.Decode.string)
         (Json.Decode.field "body" Json.Decode.string)
-        (JsonApi.Decode.relationship "creator" res Login.loginDecoder )
+        (JsonApi.Decode.relationship "creator" res Cliente.clienteDecoder )
 
 
-loginDecoder : JsonApi.Resource.Resource -> Json.Decode.Decoder Login
-loginDecoder res = 
-    Json.Decode.map2 Login
+clienteDecoder : JsonApi.Resource.Resource -> Json.Decode.Decoder Cliente
+clienteDecoder res = 
+        Json.Decode.map9 Cliente
+        (Json.Decode.field "id" Json.Decode.long)
+        (Json.Decode.field "nombreCompleto" Json.Decode.string)
         (Json.Decode.field "cedula" Json.Decode.string)
-        (Json.Decode.field "password" Json.Decode.string)
-        
+        (Json.Decode.field "telefono" Json.Decode.string)
+        (Json.Decode.field "direccion" Json.Decode.string)
+        (Json.Decode.field "passwordEncriptado" Json.Decode.string)
+        (Json.Decode.field "fechaRegistro" Json.Decode.date)
+        (Json.Decode.field "fechaModificacion" Json.Decode.date)
+        (Json.Decode.field "estado" Json.Decode.bool)
