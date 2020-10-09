@@ -27,3 +27,11 @@ body{
 button{
     size: 100px;
 }
+
+.jumbotron{
+    color: #f8f8f8;
+    background-color:rgb(170, 65, 65);
+    border-style: solid;
+    border-radius: 100;
+    border-color: rgb(20, 20, 20);
+    }
