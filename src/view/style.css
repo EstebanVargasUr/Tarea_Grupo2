@@ -1,0 +1,37 @@
+header{
+    background: rgb(35, 99, 172);
+    color: rgb(255, 255, 255);
+    font-family: Impact, Charcoal, sans-serif;
+
+}
+
+article{
+    background: rgb(170, 65, 65);
+    color: rgb(255, 255, 255);
+}
+aside{
+    background: rgb(170, 65, 65);
+    color: rgb(255, 255, 255);
+
+}
+footer{
+    background-color: rgb(35, 99, 172);
+    color: rgb(255, 255, 255);
+    font-family: Impact, Charcoal, sans-serif;
+
+}
+
+body{
+    background-color: darkslategray;
+}
+button{
+    size: 100px;
+}
+
+.jumbotron{
+    color: #f8f8f8;
+    background-color:rgb(170, 65, 65);
+    border-style: solid;
+    border-radius: 100;
+    border-color: rgb(20, 20, 20);
+    }
