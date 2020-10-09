@@ -1,4 +1,4 @@
-module Beans.Usuario exposing (..)
+module Beans.Variacion exposing (..)
 
 import RemoteData exposing (RemoteData)
 import Http.Error exposing (RequestError)
@@ -12,17 +12,15 @@ import JsonApi.Encode.Document exposing (build)
 import JsonApi.Resource exposing (build)
 import JsonApi.Encode exposing (document)
 import Json.Decode exposing (Decoder)
-import Beans.Usuario as Usuario
+import Beans.Variacion as Variacion
 
-type alias Usuario =
+type alias Variacion =
    { id : Long
-    ,cedula : String
-   , nombreCompleto : String
+    ,descripcion : String
    , estado : Bool
+   , grupo : Bool
    , fechaRegistro : Date
-   , fechaModificacion : Date
-   , departamentoId : Long
-   , esJefe : Bool
+   , tramite_tipoId : Long
    }
 
 
@@ -30,7 +28,7 @@ type alias Post =
     { id : String
     , title : String
     , body : String
-    , creator : Usuario
+    , creator : Variacion
     }
 
 
@@ -44,7 +42,7 @@ createPost : (RemoteData.RemoteData Http.Error.RequestError Post) -> PostPayload
 createPost msg body =
     Http.Request.request
         { headers = []
-        , url = { url = "http://localhost:8099/usuarios", method = Http.Methods.POST }
+        , url = { url = "http://localhost:8099/variaciones", method = Http.Methods.POST }
         , body = encodeBody body
         , documentDecoder = JsonApi.Decode.resource "posts" postDecoder
         }
@@ -71,18 +69,16 @@ postDecoder res =
         (Json.Decode.succeed (JsonApi.Resource.id res))
         (Json.Decode.field "title" Json.Decode.string)
         (Json.Decode.field "body" Json.Decode.string)
-        (JsonApi.Decode.relationship "creator" res Usuario.usuarioDecoder )
+        (JsonApi.Decode.relationship "creator" res Variacion.variacionDecoder )
 
 
-usuarioDecoder : JsonApi.Resource.Resource -> Json.Decode.Decoder Usuario
-usuarioDecoder res = 
-    Json.Decode.map8 Usuario
+variacionDecoder : JsonApi.Resource.Resource -> Json.Decode.Decoder Variacion
+variacionDecoder res = 
+    Json.Decode.map6 Variacion
         (Json.Decode.succeed (JsonApi.Resource.id res))
-        (Json.Decode.field "cedula" Json.Decode.string)
-        (Json.Decode.field "nombreCompleto" Json.Decode.string)
-        (Json.Decode.field "estado" Json.Decode.bool)
+        (Json.Decode.field "descripcion" Json.Decode.string)
+        (Json.Decode.field "estado" Json.Decode.string)
+        (Json.Decode.field "grupo" Json.Decode.bool)
         (Json.Decode.field "fechaRegistro" Json.Decode.Date)
-        (Json.Decode.field "fechaModificacion" Json.Decode.Date)
-        (Json.Decode.field "departamentoId" Json.Decode.Long)
-        (Json.Decode.field "esJefe" Json.Decode.bool)
+        (Json.Decode.field "tramite_tipoId" Json.Decode.Date)
         
